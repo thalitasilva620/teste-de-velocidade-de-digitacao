@@ -15,6 +15,7 @@ export function usePersonalBest() {
     }, [])
 
     const savePersonalBest = (wpm: number) => {
+        
         const newBest: PersonalBest = { wpm }
 
         setPersonalBest(newBest);
