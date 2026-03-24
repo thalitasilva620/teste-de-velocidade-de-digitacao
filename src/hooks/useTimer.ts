@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { TestMode } from '../types'
+
+const TIMED_DURATION = 60
 
 interface useTimerReturn {
     time: number;
@@ -8,17 +11,17 @@ interface useTimerReturn {
     reset: () => void
 }
 
-export function useTimer((mode: TestMode, onExpire: () => void): useTimerReturn) {
+export function useTimer(mode: TestMode, onExpire: () => void): useTimerReturn {
 
     const initialTime = mode === 'timed' ? TIMED_DURATION : 0
     const [time, setTime] = useState(initialTime)
     const [isRunning, setIsRunning] = useState(false)
 
-    const intervalRef = useRef<returnType<typeof setInterval | null>(null)
+    const intervalRef = useRef<ReturnType<typeof setInterval | null>(null)
 
     const onExpireRef = useRef(onExpire)
     useEffect(() => {
-        onExpireRef.current = onExpireRef
+        onExpireRef.current = onExpire
     }, [onExpire])
 
     useEffect(() => {
@@ -70,5 +73,5 @@ export function useTimer((mode: TestMode, onExpire: () => void): useTimerReturn)
         setTime(mode === 'timed' ? TIMED_DURATION : 0)
     }, [mode])
 
-    return { time, isRunnig, start, stop, reset }
+    return { time, isRunning, start, stop, reset }
 }
