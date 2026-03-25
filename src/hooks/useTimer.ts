@@ -17,7 +17,7 @@ export function useTimer(mode: TestMode, onExpire: () => void): useTimerReturn {
     const [time, setTime] = useState(initialTime)
     const [isRunning, setIsRunning] = useState(false)
 
-    const intervalRef = useRef<ReturnType<typeof setInterval | null>(null)
+    const intervalRef = useRef<number | null>(null)
 
     const onExpireRef = useRef(onExpire)
     useEffect(() => {

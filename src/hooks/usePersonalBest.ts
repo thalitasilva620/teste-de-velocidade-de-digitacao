@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type{ PersonalBest } from "../types";
 
+const STORAGE_KEY = 'typing-speed-personal-best'
+
 export function usePersonalBest() {
     const [personalBest, setPersonalBest] = useState<PersonalBest | null>(null);
 
