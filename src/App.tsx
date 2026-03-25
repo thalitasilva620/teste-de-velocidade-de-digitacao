@@ -4,6 +4,11 @@ import { useTypingEngine } from "./hooks/useTypingEngine"
 import { usePersonalBest } from "./hooks/usePersonalBest"
 import { useTimer } from "./hooks/useTimer"
 import type { Difficulty, ResultType, TestMode, TestResult } from "./types"
+import { Header } from "./components/Header"
+import { StatsBar } from './components/StatsBar'
+import { Controls } from './components/Controls'
+import { TypingArea } from './components/TypingArea'
+
 
 function App() {
   const [difficulty, setDifficulty] = useState<Difficulty>('hard')
@@ -113,11 +118,8 @@ function App() {
   }, [testStatus, handleKeyPress])
 
   return (
-    <div className="bg-red-500 text-white p-4">
-      <div>
-        <strong>Teste Velocidade de Digitação</strong>
-        {personalBest && <span>🏆 {personalBest.wpm} WPM</span>}
-      </div>
+    <div className="app">
+      <Header personalBest={personalBest} />
 
       {testStatus === 'finished' && testRsult ? (
         <div>
@@ -128,13 +130,22 @@ function App() {
         </div>
       ) : (
         <>
-          <div>WPM: {stats.wpm} | Accuracy: {stats.accuracy}% | Time:{stats.time}s</div>
+          <StatsBar stats={stats} mode={mode} />
 
-          <div
-           onClick={startTest}
-          >
-           {passage.text} 
-          </div>
+          <Controls 
+            difficulty={difficulty}
+            mode={mode}
+            onDifficultyChange={handleDifficultyChange}
+            onModeChange={handleModeChange}
+          />
+
+          <TypingArea 
+            chars={chars}
+            cursorIndex={cursorIndex}
+            status={testStatus}
+            onStart={startTest}
+            onRestart={handleRestart}
+          />
         </>
       )}
     </div>
