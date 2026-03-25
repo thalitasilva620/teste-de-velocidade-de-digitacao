@@ -1,6 +1,145 @@
-function App() {
+import { useCallback, useEffect, useState } from "react"
+import { getRandomPassage } from "./utils/passages"
+import { useTypingEngine } from "./hooks/useTypingEngine"
+import { usePersonalBest } from "./hooks/usePersonalBest"
+import { useTimer } from "./hooks/useTimer"
+import type { Difficulty, ResultType, TestMode, TestResult } from "./types"
 
-  return 
+function App() {
+  const [difficulty, setDifficulty] = useState<Difficulty>('hard')
+  const [mode, setMode] = useState<TestMode>('timed')
+  const [passage, setPassage] = useState(() => getRandomPassage('hard'))
+  const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'finished'>('idle')
+  const [testRsult, setTestResult] = useState<TestResult | null>(null)
+
+  const { personalBest, savePersonalBest } = usePersonalBest()
+
+  const handleTimeExpire = useCallback(() => {
+    finishTest()
+  }, [])
+
+  const { time, start: startTimer, stop: stopTimer, reset: resetTime } = useTimer(
+    mode,
+    handleTimeExpire
+  )
+
+  const handleComplete = useCallback(() => {
+    finishTest()
+  }, [])
+
+  const { chars, cursorIndex, stats, handleKeyPress, reset: resetEngine } = useTypingEngine({
+    passage: passage.text,
+    mode,
+    time,
+    onComplete: handleComplete,
+  })
+
+  function finishTest() {
+    stopTimer()
+    setTestStatus('finished')
+
+    let resultType: ResultType = 'complete'
+
+    if (!personalBest) {
+      resultType = 'baseline'
+      savePersonalBest(stats.wpm)
+    }else if (stats.wpm > personalBest.wpm) {
+      resultType = 'highscore'
+      savePersonalBest(stats.wpm)
+    }
+
+    setTestResult({
+      wpm: stats.wpm,
+      accuracy: stats.accuracy,
+      correctChars: stats.correctChars,
+      incorrectChars: stats.incorrectChars, 
+      resultType,
+    })
+  }
+
+  function startTest() {
+    if (testStatus !== 'idle') return
+    setTestStatus('running')
+    startTimer()
+  }
+
+  const handleRestart = useCallback(() => {
+    const newPassage = getRandomPassage(difficulty, passage.id)
+    setPassage(newPassage)
+    resetEngine(newPassage.text)
+    resetTime()
+    setTestStatus('idle')
+    setTestResult(null)
+  }, [difficulty, passage.id, resetEngine, resetTime])
+
+  function handleDifficultyChange(newDifficulty: Difficulty) {
+    setDifficulty(newDifficulty)
+    const newPassage = getRandomPassage(newDifficulty)
+    setPassage(newPassage)
+    resetEngine(newPassage.text)
+    resetTime()
+    setTestStatus('idle')
+    setTestResult(null)
+  }
+
+  function handleModeChange(newMode: TestMode) {
+    setMode(newMode)
+    resetEngine(passage.text)
+    setTestStatus('idle')
+    setTestResult(null)
+  }
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+      if (e.key === 'Tab') { e.preventDefault(); return }
+
+      if (testStatus === 'idle') {
+        if (e.key.length === 1 || e.key === 'Backspace') {
+          startTest()
+        }
+        return
+      }
+
+      if (testStatus === 'running') {
+        if (e.key.length === 1 || e.key === 'Backspace') {
+          handleKeyPress(e.key)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [testStatus, handleKeyPress])
+
+  return (
+    <div className="bg-red-500 text-white p-4">
+      <div>
+        <strong>Teste Velocidade de Digitação</strong>
+        {personalBest && <span>🏆 {personalBest.wpm} WPM</span>}
+      </div>
+
+      {testStatus === 'finished' && testRsult ? (
+        <div>
+          <h2>{testRsult.resultType === 'baseline' ? 'Baseline Established!' : testRsult.resultType === 'highscore' ? 'High Score Smashed!' :
+          'Test Complet!'}</h2>
+          <p>WPM: {testRsult.wpm} | Accuracy: {testRsult.accuracy}%</p>
+          <button onClick={handleRestart}>Go Again</button>
+        </div>
+      ) : (
+        <>
+          <div>WPM: {stats.wpm} | Accuracy: {stats.accuracy}% | Time:{stats.time}s</div>
+
+          <div
+           onClick={startTest}
+          >
+           {passage.text} 
+          </div>
+        </>
+      )}
+    </div>
+
+  )
 }
 
 export default App
