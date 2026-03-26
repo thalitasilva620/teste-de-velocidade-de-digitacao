@@ -6,7 +6,7 @@ interface ControlsProps {
     difficulty: Difficulty;
     mode: TestMode;
     onDifficultyChange: (d: Difficulty) => void
-    onmodeChange: (m: TestMode) => void
+    onModeChange: (m: TestMode) => void
 }
 
 const DIFFICULTIES: { value: Difficulty; label: string }[] = [
