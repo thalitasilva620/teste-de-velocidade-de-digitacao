@@ -7,8 +7,8 @@ import iconYellowStar from '../../assets/images/pattern-star-1.svg'
 import iconAction from '../../assets/images/icon-restart.svg'
 
 interface ResultsScreenProps {
-    result: TestResult 
-    onRestart: () => void
+  result: TestResult
+  onRestart: () => void
 }
 
 const RESULT_CONFIG = {

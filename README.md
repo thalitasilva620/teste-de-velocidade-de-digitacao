@@ -113,8 +113,8 @@ Desenvolvi a tipagem completa da aplicação antes de escrever qualquer componen
 
 ## 🔗 Links
 
-- [Solução no Frontend Mentor](#)
-- [Deploy da aplicação](#)
+- [Repositório](https://github.com/thalitasilva620/teste-de-velocidade-de-digitacao)
+- [Deploy da aplicação](https://teste-de-velocidade-de-dig-git-32cb38-thalitasilva620s-projects.vercel.app/)
 
 ---
 
