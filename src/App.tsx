@@ -8,6 +8,7 @@ import { Header } from "./components/Header"
 import { StatsBar } from './components/StatsBar'
 import { Controls } from './components/Controls'
 import { TypingArea } from './components/TypingArea'
+import { ResultScreen } from './components/ResultScreen'
 
 
 function App() {
@@ -122,12 +123,7 @@ function App() {
       <Header personalBest={personalBest} />
 
       {testStatus === 'finished' && testRsult ? (
-        <div>
-          <h2>{testRsult.resultType === 'baseline' ? 'Baseline Established!' : testRsult.resultType === 'highscore' ? 'High Score Smashed!' :
-          'Test Complet!'}</h2>
-          <p>WPM: {testRsult.wpm} | Accuracy: {testRsult.accuracy}%</p>
-          <button onClick={handleRestart}>Go Again</button>
-        </div>
+        <ResultScreen result={testResult} onRestart={handleRestart} />
       ) : (
         <>
           <StatsBar stats={stats} mode={mode} />
