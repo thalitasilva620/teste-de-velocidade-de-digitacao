@@ -8,7 +8,7 @@ import { Header } from "./components/Header"
 import { StatsBar } from './components/StatsBar'
 import { Controls } from './components/Controls'
 import { TypingArea } from './components/TypingArea'
-import { ResultScreen } from './components/ResultScreen'
+import { ResultsScreen } from './components/ResultScreen'
 
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
     if (!personalBest) {
       resultType = 'baseline'
       savePersonalBest(stats.wpm)
-    }else if (stats.wpm > personalBest.wpm) {
+    } else if (stats.wpm > personalBest.wpm) {
       resultType = 'highscore'
       savePersonalBest(stats.wpm)
     }
@@ -58,7 +58,7 @@ function App() {
       wpm: stats.wpm,
       accuracy: stats.accuracy,
       correctChars: stats.correctChars,
-      incorrectChars: stats.incorrectChars, 
+      incorrectChars: stats.incorrectChars,
       resultType,
     })
   }
@@ -122,20 +122,27 @@ function App() {
     <div className="app">
       <Header personalBest={personalBest} />
 
+      <div className="w-full h-px bg-neutral-800" />
       {testStatus === 'finished' && testRsult ? (
-        <ResultScreen result={testResult} onRestart={handleRestart} />
+        <ResultsScreen result={testRsult} onRestart={handleRestart} />
       ) : (
         <>
-          <StatsBar stats={stats} mode={mode} />
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between
+                  gap-4 md:gap-0 py-4">
+            <StatsBar stats={stats} mode={mode} />
+            <div className="px-6 md:px-0">
+              <Controls
+                difficulty={difficulty}
+                mode={mode}
+                onDifficultyChange={handleDifficultyChange}
+                onmodeChange={handleModeChange}
+              />
+            </div>
+          </div>
 
-          <Controls 
-            difficulty={difficulty}
-            mode={mode}
-            onDifficultyChange={handleDifficultyChange}
-            onModeChange={handleModeChange}
-          />
+          <div className="w-full h-px bg-neutral-800" />
 
-          <TypingArea 
+          <TypingArea
             chars={chars}
             cursorIndex={cursorIndex}
             status={testStatus}
