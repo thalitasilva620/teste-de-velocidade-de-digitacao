@@ -55,10 +55,10 @@ O **Teste de Velocidade de Digitação** é uma aplicação web que permite ao u
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/seu-usuario/typing-speed-test.git
+git clone https://github.com/thalitasilva620/teste-de-velocidade-de-digitacao.git
 
 # 2. Acesse a pasta do projeto
-cd typing-speed-test
+cd teste-velocidade-de-digitacao
 
 # 3. Instale as dependências
 npm install
