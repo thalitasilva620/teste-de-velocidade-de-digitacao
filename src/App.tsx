@@ -10,12 +10,13 @@ import { Controls } from './components/Controls'
 import { TypingArea } from './components/TypingArea'
 import { ResultsScreen } from './components/ResultScreen'
 
+type TestStatus = 'idle' | 'running' | 'finished'
 
 function App() {
   const [difficulty, setDifficulty] = useState<Difficulty>('hard')
   const [mode, setMode] = useState<TestMode>('timed')
   const [passage, setPassage] = useState(() => getRandomPassage('hard'))
-  const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'finished'>('idle')
+  const [testStatus, setTestStatus] = useState<TestStatus>('idle')
   const [testRsult, setTestResult] = useState<TestResult | null>(null)
 
   const { personalBest, savePersonalBest } = usePersonalBest()
