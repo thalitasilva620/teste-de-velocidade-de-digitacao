@@ -135,7 +135,7 @@ function App() {
                 difficulty={difficulty}
                 mode={mode}
                 onDifficultyChange={handleDifficultyChange}
-                onmodeChange={handleModeChange}
+                onModeChange={handleModeChange}
               />
             </div>
           </div>
