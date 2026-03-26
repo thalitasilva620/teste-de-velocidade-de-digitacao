@@ -45,6 +45,7 @@ O **Teste de Velocidade de Digitação** é uma aplicação web que permite ao u
 | [React](https://react.dev/) | 18 | Biblioteca de interface |
 | [TypeScript](https://www.typescriptlang.org/) | 5 | Tipagem estática |
 | [Vite](https://vitejs.dev/) | 8 | Bundler e servidor de desenvolvimento |
+| [Tailwind CSS](https://tailwindcss.com/) | 4 | Estilização e design responsivo |
 
 ---
 
